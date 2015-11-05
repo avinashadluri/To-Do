@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf8">
+		<title>Reminder</title>
+		<!-- <link href="lib/todos.css" rel="stylesheet" type="text/css"> -->
+		<!-- <link href="lib/jquerysctipttop.css" rel="stylesheet" type="text/css"> -->
+		
+		<!-- Bootstrap core CSS -->
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- MDB core CSS -->
+<link href="http://mdbootstrap.com/wp-content/themes/mdbootstrap/css/mdb.css?ver=4.3.1" rel="stylesheet">
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css?ver=4.3.1" rel="stylesheet">
+<style type="text/css">
+	#todoapp section {
+    width: 90%;
+    margin: 0 auto;
+    max-width: 100%;
+    padding: 0 5%;
+}
+</style>
+	</head>
+	<body>
+		<div id="todoapp">
+			<section>
+	            <input id="new-todo" type="text" class="validate" placeholder="what to remember..">
+			</section>
+			<section id='main'>
+				<ul id='todo-list'>
+				</ul>
+			</section>
+		</div>
+		<div class="row">
+		 <!-- JQuery -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+
+<!-- Bootstrap core JavaScript -->
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+<!-- MDB core JavaScript -->
+<script type="text/javascript" src="http://mdbootstrap.com/wp-content/themes/mdbootstrap/js/mdb.js"></script>
+
+		<script src="lib/todos.js"></script>
+		<script type="text/javascript">
+			// var script = document.createElement( 'script' );
+			// var script_url = "lib/data.js";
+			// script.src = script_url;
+			// $("head").append( script );
+			// console.log( test );
+			// test.name ="test";
+			// console.log( test);
+			// $.getScript( "data.js" )
+			//   .success(function() {
+			//     console.log( test );
+			//   })
+			//   .error(function( jqxhr, settings, exception ) {
+			//     console.log( "Triggered ajaxError handler."+jqxhr+settings+ exception );
+			// });
+		</script>
+	</body>
+</html>
+
