@@ -1,86 +1,533 @@
 <!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="utf8">
-		<title>Reminder</title>
-		<!-- <link href="lib/todos.css" rel="stylesheet" type="text/css"> -->
-		<!-- <link href="lib/jquerysctipttop.css" rel="stylesheet" type="text/css"> -->
-		
-		<!-- Bootstrap core CSS -->
-<link href="css/bootstrap.min.css" rel="stylesheet">
+<!--
+    Copyright (c) 2012-2014 Adobe Systems Incorporated. All rights reserved.
 
-<!-- MDB core CSS -->
-<link href="css/mdb.css?ver=4.3.1" rel="stylesheet">
-<link href="css/font-awesome.min.css?ver=4.3.1" rel="stylesheet">
-<style type="text/css">
-	#todoapp section {
-    width: 90%;
-    margin: 0 auto;
-    max-width: 100%;
-    padding: 0 5%;
-    margin-top: 15px;
-}
-#todo-list .destroy {
-position: absolute;
-right: 5px;
-top: 10px;
-cursor: pointer;
-width: 20px;
-height: 20px;
-background: url(img/destroy.png) no-repeat;
-}
-#todo-list li:hover .destroy {
-display: block;
-}
-#todo-list .destroy:hover {
-background-position: 0 -20px;
-}
-</style>
-	</head>
-	<body>
-		<div id="todoapp">
-			<section>
-	            <input id="new-todo" type="text" class="validate" placeholder="what to remember..">
-			</section>
-			<section>
-				<button type="button" class="btn btn-default waves-effect waves-light"><i class="fa fa-home"></i></button>
-			    <button type="button" class="btn btn-primary waves-effect waves-light"><i class="fa fa-file-text-o"></i></button>
-			    <button type="button" class="btn btn-success waves-effect waves-light"><i class="fa fa-list"></i></button>
-			    <button type="button" class="btn btn-info waves-effect waves-light"><i class="fa fa-thumbs-up"></i></button>
-			    <button type="button" class="btn btn-link">All</button>
-			</section>
-			<section id='main'>
-				<ul id='todo-list'>
-				</ul>
-			</section>
-		</div>
-		<div class="row">
-		 <!-- JQuery -->
-<script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
 
-<!-- Bootstrap core JavaScript -->
-<script type="text/javascript" src="js/bootstrap.min.js"></script>
+    http://www.apache.org/licenses/LICENSE-2.0
 
-<!-- MDB core JavaScript -->
-<script type="text/javascript" src="js/mdb.js"></script>
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="msapplication-tap-highlight" content="no" />
+        <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+        <!-- <link rel="stylesheet" type="text/css" href="css/index.css" /> -->
+        <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+        <title>To Do</title>
+        <style type="text/css">
+            @font-face {
+              font-family: 'Ubuntu';
+              font-style: normal;
+              font-weight: 400;
+              src: local('Ubuntu'), url(fonts/ODszJI8YqNw8V2xPulzjO_esZW2xOQ-xsNqO47m55DA.woff2) format('woff2');
+              unicode-range: U+0460-052F, U+20B4, U+2DE0-2DFF, U+A640-A69F;
+            }
+            /* cyrillic */
+            @font-face {
+              font-family: 'Ubuntu';
+              font-style: normal;
+              font-weight: 400;
+              src: local('Ubuntu'), url(fonts/iQ9VJx1UMASKNiGywyyCXvesZW2xOQ-xsNqO47m55DA.woff2) format('woff2');
+              unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+            }
+            /* greek-ext */
+            @font-face {
+              font-family: 'Ubuntu';
+              font-style: normal;
+              font-weight: 400;
+              src: local('Ubuntu'), url(fonts/WkvQmvwsfw_KKeau9SlQ2_esZW2xOQ-xsNqO47m55DA.woff2) format('woff2');
+              unicode-range: U+1F00-1FFF;
+            }
+            /* greek */
+            @font-face {
+              font-family: 'Ubuntu';
+              font-style: normal;
+              font-weight: 400;
+              src: local('Ubuntu'), url(fonts/gYAtqXUikkQjyJA1SnpDLvesZW2xOQ-xsNqO47m55DA.woff2) format('woff2');
+              unicode-range: U+0370-03FF;
+            }
+            /* latin-ext */
+            @font-face {
+              font-family: 'Ubuntu';
+              font-style: normal;
+              font-weight: 400;
+              src: local('Ubuntu'), url(fonts/Wu5Iuha-XnKDBvqRwQzAG_esZW2xOQ-xsNqO47m55DA.woff2) format('woff2');
+              unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF;
+            }
+            /* latin */
+            @font-face {
+              font-family: 'Ubuntu';
+              font-style: normal;
+              font-weight: 400;
+              src: local('Ubuntu'), url(fonts/sDGTilo5QRsfWu6Yc11AXg.woff2) format('woff2');
+              unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+            }
+            /*header starts*/
+            body {
+              /*background-color: #E3E3E3;*/
+            }
+            h1,h2,h3,h4,h5,h6,b,p,textarea,input,small,li,button,div,a
+            {
+              font-family: 'Ubuntu' !important;
+            }
+            html,body {
+                padding:0;
+                margin: 0;
+                background-color: #ddd;
+            }
+            .content-hide {
+                display: none;
+            }
+            nav {
+              background-color: #55acee !important;
+            }
+            .row {
+                margin-bottom: 0;
+            }
+            .collapsible-body {
+                background-color: white;
+            }
+            .collapsible-body p {
+                padding: 5px 0px;
+                /*border-bottom: 1px solid #ddd;*/
+            }
+            .btn:active {
+              opacity: 0.5;
+            }
+            .blockScreen {
+                position: fixed;
+                z-index: 999;
+                top: -100px;
+                left: 0;
+                bottom: 0;
+                right: 0;
+                height: 125%;
+                width: 100%;
+                background: #000;
+                display: none;
+                z-index: 1002;
+                opacity: 0.5;
+                text-align: center;
+                padding-top: 80%;
+            }
+            .edittodoicon {
+                font-size: 1.6rem;
+                /*display: inline-block;*/
+                float: right;
+                cursor: pointer;
+                color: #ab47bc;
+            }
+            .alarmicon{
+                font-size: 1.6rem;
+                /*display: inline-block;*/
+                float: right;
+                cursor: pointer;
+                padding-right: 15px;
+                color: #ec407a;
+            }
+            .deletetodoicon{
+                font-size: 1.6rem;
+                /*display: inline-block;*/
+                float: right;
+                cursor: pointer;
+                padding-right: 15px;
+                color: red;
+            }
+            .todocontent p {
+              position: relative;
+            }
+            .doneedittodoicon {
+              position: absolute;
+              right: 0;
+              top: 17px;
+              cursor: pointer;
+            }
+            .colorgreen { color: green; }
+            .colorred { color: red; }
+            .clearcompleted {
+              font-weight: 300;
+              font-size: 0.8rem;
+              color: #fff;
+              background-color: #26a69a;
+              border-radius: 2px;
+              margin-bottom: 5px;
+            }
+            .removecategory {
+              font-weight: 300;
+              font-size: 0.8rem;
+              color: #fff;
+              background-color: red;
+              border-radius: 2px;
+              margin-left: 5px;
+            }
+            .clearcompleted, .removecategory {
+              cursor: pointer;
+              margin-top: 5px;
+            }
+            hr {
+              margin: 0;
+              opacity: 0.2;
+            }
+            .categorytrigger {
+                padding: 12px;
+            }
+        </style>
+        <link rel="stylesheet" href="css/materialdesignicons.min.css">
+    </head>
+    <body>
+        <div class="app content-hide">
+            <div id="deviceready" class="blink">
+                <p class="event listening">Connecting to Device</p>
+                <p class="event received">Hurray, Device is Ready!!!!</p>
+            </div>
+        </div>
+        <nav>
+            <div class="nav-wrapper">
+              <a href="#!" class="brand-logo center">To Do</a>
+              <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+              <a class="modal-trigger right categorytrigger hide-on-med-and-up" href="#modal1" title="Add category">
+                <i class="material-icons">add</i>
+              </a>   
+              <ul class="right hide-on-med-and-down">
+                <li><a class="modal-trigger" href="#modal1">Add Category</a></li>
+                <li><a href="">Account</a></li>
+                <li><a href="">Settings</a></li>
+                <li><a href="">About</a></li>
+              </ul>
+              <ul class="side-nav" id="mobile-demo">
+                <li><a href="">Account</a></li>
+                <li><a href="">Settings</a></li>
+                <li><a href="">About</a></li>
+              </ul>
+            </div>
+        </nav>
+        <!-- <div class="row">
+            <div class="input-field col s12">              
+              <input value="" id="first_name2" type="text" class="validate" placeholder="What To Do .. ?">
+            </div>
+        </div> -->
+        <ul class="collapsible todo_categories">
+            <li cat="personal">
+              <div class="collapsible-header active">
+                <b><i class="large material-icons">list</i>PERSONAL</b>
+                <span class="materialicon right">
+                    <i class="mdi mdi-chevron-down"></i>
+                </span>
+              </div>
+              <div class="collapsible-body">
+                <div class="row">
+                    <div class="input-field col s12">                      
+                      <input value="" class="todo" type="text" placeholder="What To Do .. ?" cat="personal">
+                    </div>
+                    <div class="col s12 todocontent">
+                        <hr>
+                        <button class="btn waves-effect waves-light clearcompleted right" type="button" name="action" cat="category">
+                            <i class="mdi mdi-checkbox-multiple-marked-outline"></i>
+                        </button>
+                    </div>
+              </div>
+            </li>
+        </ul>
+        <div class="fixed-action-btn content-hide" style="bottom: 10px; right: 10px;">
+            <a class="modal-trigger btn-floating btn-large red" href="#modal2">
+              <i class="large material-icons">add</i>
+            </a>   
+        </div> 
+        <div class="fixed-action-btn content-hide" style="bottom: 10px; right: 10px;">
+            <a class="modal-trigger btn-floating btn-large blue" href="#modal1">
+              <i class="large material-icons">playlist_add</i>
+            </a>
+        </div>  
 
-		<script src="js/todos.js"></script>
-		<script type="text/javascript">
-			// var script = document.createElement( 'script' );
-			// var script_url = "lib/data.js";
-			// script.src = script_url;
-			// $("head").append( script );
-			// console.log( test );
-			// test.name ="test";
-			// console.log( test);
-			// $.getScript( "data.js" )
-			//   .success(function() {
-			//     console.log( test );
-			//   })
-			//   .error(function( jqxhr, settings, exception ) {
-			//     console.log( "Triggered ajaxError handler."+jqxhr+settings+ exception );
-			// });
-		</script>
-	</body>
+        <!-- Modal Structure -->
+        <div id="modal1" class="modal modal-fixed-footer bottom-sheet">
+            <div class="modal-content">
+              <p>
+                  <input value="" class="add" type="text" placeholder="Add category" cat="category">
+              </p>
+            </div>
+            <div class="modal-footer">
+              <a class="modal-action waves-effect waves-light btn btnAddCategory"><i class="material-icons left">add</i>Add</a>
+              <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Close</a>
+            </div>
+        </div>
+
+        <!-- Modal Structure -->
+        <div id="modal2" class="modal modal-fixed-footer bottom-sheet">
+            <div class="modal-content">
+              <p>
+                  <input value="" class="addtodo" type="text" placeholder="What to do..?" cat="">
+              </p>
+              <div class="input-field col s12">
+                <select>
+                  <option value="" disabled selected>Choose your category</option>
+                  <option value="1">Personal</option>
+                  <option value="2">Work</option>
+                  <option value="3">Others</option>
+                </select>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <a class="modal-action waves-effect waves-light btn btnAddCategory"><i class="material-icons left">add</i>Add</a>
+              <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Close</a>
+            </div>
+        </div>
+
+        <!-- Alarm Modal Structure -->
+        <div id="alarmModal" class="modal modal-fixed-footer bottom-sheet">
+            <div class="modal-content">
+                <h5>Coming soon...</h5>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+
+        <div class="blockScreen content-hide">
+            <div class="preloader-wrapper big active hide-on-large-only">
+              <div class="spinner-layer spinner-blue-only">
+                <div class="circle-clipper left">
+                  <div class="circle"></div>
+                </div><div class="gap-patch">
+                  <div class="circle"></div>
+                </div><div class="circle-clipper right">
+                  <div class="circle"></div>
+                </div>
+              </div>
+            </div>
+            <div class="hide-on-med-and-down">
+              <b>Please wait</b>
+            </div>
+        </div>
+
+        <!-- <script type="text/javascript" src="cordova.js"></script> -->
+        <script type="text/javascript" src="js/index.js"></script>
+
+        <script type="text/javascript" src="js/jquery.min.js"></script>
+        <script type="text/javascript" src="js/materialize.js"></script>
+        <script type="text/javascript">
+            app.initialize(); 
+            $(document).ready(function() {
+              var EnterKey = 13;
+              var maindata = {};              
+              blockScreen();
+              initializeList();
+              $(".button-collapse").sideNav();
+              $('.modal-trigger').leanModal();
+               $('select').material_select();
+              $(document).on('click','.btnAddCategory',function(e) {
+                addCategory();
+              });
+              $(document).on('keypress','.add',function(e) {
+                if (e.which === EnterKey && $(this).val()) {
+                  addCategory();
+                }
+              });
+              $(document).on('keypress','.todo',function(e) {
+                if (e.which === EnterKey && $(this).val()) {
+                    var thisValue = $(this).val();
+                    var thisCategory = $(this).attr('cat');
+                    var existingDataCount = $(this).closest(".row").find('p').length;
+                    existingDataCount = (existingDataCount>=1)?(existingDataCount+1):1;
+                    var appendData = '<p><input type="checkbox" name="'+thisCategory+existingDataCount+'" id="'+thisCategory+existingDataCount+'" class="todocheckbox" cat="'+thisCategory+'" count="'+existingDataCount+'"/><label for="'+thisCategory+existingDataCount+'" class="checkboxlabel" cat="'+thisCategory+'" count="'+existingDataCount+'">'+thisValue+'</label><i class="material-icons edittodoicon">edit</i><i class="material-icons alarmicon">alarm</i><input type="text" id="text_'+thisCategory+existingDataCount+'" class="edittodo content-hide" value="'+thisValue+'"><i class="material-icons doneedittodoicon content-hide">done</i></p>';
+                    $(this).closest(".row").find(".todocontent").prepend(appendData);
+                    $(this).val('');
+                    if(localStorage.tododata) {
+                      var maindata = JSON.parse(localStorage.tododata);  
+                      console.log(maindata);
+                      var thisIndex = (maindata.categories).indexOf(thisCategory);
+                      var thisArray = (maindata.todos[thisIndex]);
+                      thisArray.push({task:thisValue,alarm:"",status:0});
+                      maindata.todos[thisIndex] = thisArray;
+                      console.log(maindata);
+                      localStorage.tododata = JSON.stringify(maindata);
+                    }
+                }
+              }); 
+              $(document).on('click','.checkboxlabel',function(e) {
+                var thisCategory = $(this).attr('cat');
+                var thisCount = $(this).attr('count');
+                if(localStorage.tododata) {
+                    var maindata = JSON.parse(localStorage.tododata);  
+                    var thisIndex = (maindata.categories).indexOf(thisCategory);
+                    var thisArray = (maindata.todos[thisIndex]);
+                    var thisId = $(this).attr("for");
+                    if($("#"+thisId).is(':checked')) {
+                        console.log(1);
+                        thisArray[thisCount-1].status = 0;
+                        $(this).parent("p").find("i").show();
+                        $(this).parent("p").find(".doneedittodoicon").hide();
+                        // $(this).closest('.todocontent').prepend($(this).closest('p'));
+                    }else {
+                        console.log(0);
+                        thisArray[thisCount-1].status = 1;
+                        $(this).parent("p").find("i").hide();
+                        // $(this).closest('.todocontent').find("hr").before($(this).closest('p'));
+                    } 
+                    maindata.todos[thisIndex] = thisArray;
+                    localStorage.tododata = JSON.stringify(maindata);
+                }            
+              });
+              $(document).on('click', '.clearcompleted', function(event) { 
+                if (confirm("This will clear completed tasks, are you sure?") == true) {
+                  var li = $(this).closest('li').find(".todocheckbox");
+                  li.each(function(index, el) {
+                    ($(el).is(':checked'))?$(el).closest('p').fadeOut(500, function() { $(this).remove(); }):'';
+                  });
+                  return false;
+                }
+              });
+              $(document).on('click', '.removecategory', function(event) {
+                if (confirm("This will delete this category, are you sure?") == true) {
+                  $(this).closest('li').fadeOut(500, function() { $(this).remove();});
+                  return false;
+                }
+              });
+              $(document).on('click', '.edittodoicon', function(event) {
+                $(this).parent().find("input,label,i").hide();
+                $(this).parent().find(".edittodo,.doneedittodoicon").show();
+              });
+              $(document).on('click', '.alarmicon', function(event) {
+                $('#alarmModal').openModal();
+              });
+              $(document).on('click', '.doneedittodoicon', function(event) {
+                  editToDo($(this).closest('p').find(".edittodo"));
+              })
+              $(document).on('keypress', '.edittodo', function(e) { 
+                if (e.which === EnterKey) {
+                  editToDo($(this));
+                }
+              });
+              function editToDo(thisElem) {
+                if(localStorage.tododata) {
+                    var thisCategory = thisElem.closest('p').find('label').attr('cat');
+                    var thisCount = thisElem.closest('p').find('label').attr('count');
+                    var thisValue = thisElem.closest('p').find('.edittodo').val();
+                    console.log(thisValue);
+                    if(thisValue) {
+                        var maindata = JSON.parse(localStorage.tododata);  
+                        var thisIndex = (maindata.categories).indexOf(thisCategory);
+                        var thisArray = (maindata.todos[thisIndex]);
+                        thisArray[thisCount-1].task = thisValue;
+                        // console.log(thisArray); return;
+                        maindata.todos[thisIndex] = thisArray;
+                        localStorage.tododata = JSON.stringify(maindata);
+                        thisElem.parent().find("input,label,i").show();
+                        thisElem.parent().find("label").html(thisElem.parent().find(".edittodo").val());
+                        thisElem.parent().find(".edittodo,.doneedittodoicon").hide();
+                    }else {
+                        alert("Please enter task!");
+                    }
+                } 
+              }
+              function blockScreen() {
+                $(".blockScreen").show();
+              }
+              function unBlockScreen() {
+                $(".blockScreen").hide();
+              }
+              function addCategory() {
+                var new_category = $(".add").val();
+                if(new_category) {
+                    var tempCategory = '<li cat="'+new_category+'"><div class="collapsible-header"><b><i class="large material-icons">list</i>'+new_category.toUpperCase()+'</b><span class="materialicon right"><i class="mdi mdi-chevron-down"></i></span></div><div class="collapsible-body"><div class="row"><div class="input-field col s12"><input value="" class="todo" type="text" placeholder="What To Do .. ?" cat="'+new_category+'"></div><div class="col s12 todocontent"><hr><button class="btn waves-effect waves-light removecategory right" type="button" name="action" cat="category"><i class="mdi mdi-playlist-remove"></i></button><button class="btn waves-effect waves-light clearcompleted right" type="button" name="action" cat="category"><i class="mdi mdi-checkbox-multiple-marked-outline"></i></button></div></div></div></li>';
+                    if(localStorage.tododata) {
+                        var maindata = JSON.parse(localStorage.tododata);  
+                        if((maindata.categories).indexOf(new_category) < 0) {
+                            $(".todo_categories").append(tempCategory);
+                            $('.collapsible').collapsible({                      
+                              accordion : true
+                            });
+                            (maindata.categories).push(new_category);
+                            var thisIndex = (maindata.categories).indexOf(new_category);
+                            maindata.todos[thisIndex] = [];
+                            localStorage.tododata = JSON.stringify(maindata);
+                        }else {
+                            alert("It seems that you have already added this category!");
+
+                        }
+                    }
+                    $('#modal1').closeModal();
+                    $(".add").val('');
+                }else {
+                    alert("Please give a name to category!");
+                }
+                
+              } 
+              function initializeList() {
+                if(localStorage.tododata) {
+                  var maindata = JSON.parse(localStorage.tododata);  
+                  if(maindata.categories) {
+                    $(maindata.categories).each(function(catindex,catname) {
+                      if(catname && catname != "personal") {
+                        var appendCategory = '<li cat="'+catname+'"><div class="collapsible-header"><b><i class="large material-icons">list</i>'+catname.toUpperCase()+'</b><span class="materialicon right"><i class="mdi mdi-chevron-down"></i></span></div><div class="collapsible-body"><div class="row"><div class="input-field col s12"><input value="" class="todo" type="text" placeholder="What To Do .. ?" cat="'+catname+'"></div><div class="col s12 todocontent"><hr><button class="btn waves-effect waves-light removecategory right" type="button" name="action" cat="category"><i class="mdi mdi-playlist-remove"></i></button><button class="btn waves-effect waves-light clearcompleted right" type="button" name="action" cat="category"><i class="mdi mdi-checkbox-multiple-marked-outline"></i></button></div></div></div></li>';
+                        $(".todo_categories").append(appendCategory);
+                        $('.collapsible').collapsible({                      
+                          accordion : true
+                        });
+                      }
+                    });   
+                    $(".todo_categories li").each(function(lindex, lielem) {
+                      var thisLi = $(this);
+                       if(maindata.todos[lindex]) {
+                         var arrlength = ((maindata.todos[lindex]).length);
+                         if(arrlength > 0) {
+                          $(maindata.todos[lindex]).each(function(todokey, arrval) {
+                            var todoIndex = todokey+1;
+                            var todoCat = maindata.categories[lindex];
+                            var todoValue = arrval.task;
+                            var todoStatus = (arrval.status)?"checked":"";
+                            var iconShow  = (arrval.status)?'<i class="material-icons edittodoicon content-hide">edit</i><i class="material-icons  content-hide alarmicon">alarm</i>':'<i class="material-icons edittodoicon">edit</i><i class="material-icons alarmicon">alarm</i>';
+                            var prependToDo = '<p><input type="checkbox" name="'+todoCat+todoIndex+'" id="'+todoCat+todoIndex+'" class="todocheckbox" cat="'+todoCat+'" '+todoStatus+' count="'+todoIndex+'"><label for="'+todoCat+todoIndex+'" class="checkboxlabel" cat="'+todoCat+'" count="'+todoIndex+'">'+todoValue+'</label>'+iconShow+'<input type="text" id="text_'+todoCat+todoIndex+'" class="edittodo content-hide" value="'+todoValue+'"><i class="material-icons doneedittodoicon content-hide">done</i></p>';
+                             thisLi.find(".todocontent").prepend(prependToDo);
+                          });
+                        }
+                       }
+                    });
+                  }
+                }else {
+                  localStorage.tododata = JSON.stringify({"categories":["personal"],"todos":{"0":[]}});
+                }
+                unBlockScreen();
+              } 
+            });
+        </script>
+    </body>
 </html>
 
+
+
+<!-- 
+var tododata = {
+  categories:["work","personal"],
+  todos:{
+    0:[{
+      task:"ta1",
+      alarm:"",
+      status:1
+    },{
+      task:"ta2",
+      alarm:"",
+      status:0
+    }],
+    1:{
+      task:"ta2",
+      alarm:"",
+      status:0
+    }
+  }
+} -->
