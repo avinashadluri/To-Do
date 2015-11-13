@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="msapplication-tap-highlight" content="no" />
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" />
+        <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+        <title>To Do</title>
+        <style type="text/css">
+            @font-face {
+              font-family: 'Material Icons';
+              font-style: normal;
+              font-weight: 400;
+              src: local('Material Icons'), local('MaterialIcons-Regular'), url(fonts/2fcrYFNaTjcS6g4U3t-Y5ZjZjT5FdEJ140U2DJYC3mY.woff2) format('woff2');
+            }
+            .material-icons {
+              font-family: 'Material Icons';
+              font-weight: normal;
+              font-style: normal;
+              font-size: 24px;
+              line-height: 1;
+              letter-spacing: normal;
+              text-transform: none;
+              display: inline-block;
+              white-space: nowrap;
+              word-wrap: normal;
+              direction: ltr;
+              -webkit-font-feature-settings: 'liga';
+              -webkit-font-smoothing: antialiased;
+            }
+
+
+            @font-face {
+              font-family: 'Ubuntu';
+              font-style: normal;
+              font-weight: 400;
+              src: local('Ubuntu'), url(fonts/ODszJI8YqNw8V2xPulzjO_esZW2xOQ-xsNqO47m55DA.woff2) format('woff2');
+              unicode-range: U+0460-052F, U+20B4, U+2DE0-2DFF, U+A640-A69F;
+            }
+            /* cyrillic */
+            @font-face {
+              font-family: 'Ubuntu';
+              font-style: normal;
+              font-weight: 400;
+              src: local('Ubuntu'), url(fonts/iQ9VJx1UMASKNiGywyyCXvesZW2xOQ-xsNqO47m55DA.woff2) format('woff2');
+              unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+            }
+            /* greek-ext */
+            @font-face {
+              font-family: 'Ubuntu';
+              font-style: normal;
+              font-weight: 400;
+              src: local('Ubuntu'), url(fonts/WkvQmvwsfw_KKeau9SlQ2_esZW2xOQ-xsNqO47m55DA.woff2) format('woff2');
+              unicode-range: U+1F00-1FFF;
+            }
+            /* greek */
+            @font-face {
+              font-family: 'Ubuntu';
+              font-style: normal;
+              font-weight: 400;
+              src: local('Ubuntu'), url(fonts/gYAtqXUikkQjyJA1SnpDLvesZW2xOQ-xsNqO47m55DA.woff2) format('woff2');
+              unicode-range: U+0370-03FF;
+            }
+            /* latin-ext */
+            @font-face {
+              font-family: 'Ubuntu';
+              font-style: normal;
+              font-weight: 400;
+              src: local('Ubuntu'), url(fonts/Wu5Iuha-XnKDBvqRwQzAG_esZW2xOQ-xsNqO47m55DA.woff2) format('woff2');
+              unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF;
+            }
+            /* latin */
+            @font-face {
+              font-family: 'Ubuntu';
+              font-style: normal;
+              font-weight: 400;
+              src: local('Ubuntu'), url(fonts/sDGTilo5QRsfWu6Yc11AXg.woff2) format('woff2');
+              unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+            }
+            /*header starts*/
+            body {
+              /*background-color: #E3E3E3;*/
+            }
+            h1,h2,h3,h4,h5,h6,b,p,textarea,input,small,li,button,div,a
+            {
+              font-family: 'Ubuntu' !important;
+            }
+            html,body {
+                padding:0;
+                margin: 0;
+                background-color: #ddd;
+            }
+            .content-hide {
+                display: none;
+            }
+            nav {
+              background-color: #55acee !important;
+            }
+            .row {
+                margin-bottom: 0;
+            }
+            .collapsible-body {
+                background-color: white;
+            }
+            .collapsible-body p {
+                padding: 5px 0px;
+                /*border-bottom: 1px solid #ddd;*/
+            }
+            .btn:active {
+              opacity: 0.5;
+            }
+            .blockScreen {
+                position: fixed;
+                z-index: 999;
+                top: -100px;
+                left: 0;
+                bottom: 0;
+                right: 0;
+                height: 125%;
+                width: 100%;
+                background: #000;
+                display: none;
+                z-index: 1002;
+                opacity: 0.5;
+                text-align: center;
+                padding-top: 80%;
+            }
+            .checkboxlabel {
+              color: green;
+            }
+            .edittodoicon {
+                font-size: 1.6rem;
+                /*display: inline-block;*/
+                float: right;
+                cursor: pointer;
+                color: #ab47bc;
+            }
+            .alarmicon{
+                font-size: 1.6rem;
+                /*display: inline-block;*/
+                float: right;
+                cursor: pointer;
+                padding-right: 15px;
+                color: #ec407a;
+            }
+            .deletetodoicon{
+                font-size: 1.6rem;
+                /*display: inline-block;*/
+                float: right;
+                cursor: pointer;
+                padding-right: 15px;
+                color: red;
+            }
+            .todocontent p {
+              position: relative;
+            }
+            .doneedittodoicon {
+              position: absolute;
+              right: 0;
+              top: 17px;
+              cursor: pointer;
+            }
+            .doneaddtodoicon {
+              position: absolute;      
+              right: 9px;      
+              top: 8px;      
+              cursor: pointer;
+              opacity: 0.7;
+            }
+            .colorgreen { color: green; }
+            .colorred { color: red; }
+            .clearcompleted {
+              font-weight: 300;
+              font-size: 0.8rem;
+              color: #fff;
+              background-color: #26a69a;
+              border-radius: 2px;
+              margin-bottom: 5px;
+            }
+            .removecategory {
+              font-weight: 300;
+              font-size: 0.8rem;
+              color: #fff;
+              background-color: red;
+              border-radius: 2px;
+              margin-left: 5px;
+            }
+            .clearcompleted, .removecategory {
+              cursor: pointer;
+              margin-top: 5px;
+            }
+            hr {
+              margin: 0;
+              opacity: 0.2;
+            }
+            .categorytrigger {
+                padding: 12px;
+            }
+            .btn, .btn-large, .btn-flat {
+              padding: 0 13px;
+            }
+            .btn i, .btn-large i, .btn-floating i, .btn-large i, .btn-flat i {
+              font-size: 12px;
+              margin-right: 4px;
+            }
+        </style>
+        <link rel="stylesheet" href="css/materialdesignicons.min.css">
+    </head>
+    <body>
+        <nav>
+            <div class="nav-wrapper">
+              <a href="#!" class="brand-logo center">To Do</a>
+              <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+              <ul class="right hide-on-med-and-down">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="">Account</a></li>
+                <li><a href="">Settings</a></li>
+                <li><a href="">About</a></li>
+              </ul>
+              <ul class="side-nav" id="mobile-demo">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="">Account</a></li>
+                <li><a href="">Settings</a></li>
+                <li><a href="">About</a></li>
+              </ul>
+            </div>
+        </nav> 
+        <div class="col s12 m8 offset-m2 l6 offset-l3">
+          <div class="card-panel grey lighten-5 z-depth-1">
+            <div class="row valign-wrapper">
+              <div class="col s6 m3 l3">
+                <img src="img/me.jpg" alt="" class="circle responsive-img"> <!-- notice the "circle" class -->
+              </div>
+              <div class="col s12 m6 l9">
+                <span class="black-text">
+                  I am Avinash, 
+                  <br>
+                  wanna know about me? 
+                  <br>
+                  <a href="http://avinashrajuadluri.in" target="_BLANK">
+                  <i class="mdi mdi-dribbble"></i> My website
+                  </a>
+                  <br>
+                  <a href="http://blog.avinashrajuadluri.in" target="_BLANK">
+                  <i class="mdi mdi-blogger"></i> My Blog
+                  </a>
+                  <br>
+                  <a href="http://www.facebook.com/avinashrajuadluri" target="_BLANK">
+                    <i class="mdi mdi-facebook-box"></i> My facebook
+                  </a>
+                  <br>
+                  <a href="http://twitter.com/avinashadluri" target="_BLANK">
+                    <i class="mdi mdi-twitter-box"></i> My twitter
+                  </a>
+                  <br>
+                  <a href="https://in.linkedin.com/in/avinashrajuadluri" target="_BLANK">
+                    <i class="mdi mdi-linkedin-box"></i> My Linkedin
+                  </a>
+                  <br>
+                  <a href="https://plus.google.com/+AdluriAvinashRaju" target="_BLANK">
+                    <i class="mdi mdi-google-plus-box"></i> My google+
+                  </a>
+                  <br>
+                    <i class="mdi mdi-whatsapp"></i> +91-9666472009
+                </span>
+              </div>
+            </div> 
+          </div>
+        </div>
+
+
+        <!-- <script type="text/javascript" src="cordova.js"></script> -->
+        <script type="text/javascript" src="js/index.js"></script>
+        <script type="text/javascript" src="js/jquery.min.js"></script>
+        <script type="text/javascript" src="js/materialize.js"></script>
+        <script type="text/javascript">
+            app.initialize();  
+            $(".button-collapse").sideNav();
+        </script>
+    </body>
+</html>

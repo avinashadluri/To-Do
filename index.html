@@ -130,6 +130,9 @@
                 padding: 5px 0px;
                 /*border-bottom: 1px solid #ddd;*/
             }
+            .collapsible li {
+              margin: 0 5px;
+            }
             .btn:active {
               opacity: 0.5;
             }
@@ -148,6 +151,9 @@
                 opacity: 0.5;
                 text-align: center;
                 padding-top: 80%;
+            }
+            .checkboxlabel {
+              color: green;
             }
             .edittodoicon {
                 font-size: 1.6rem;
@@ -181,6 +187,13 @@
               top: 17px;
               cursor: pointer;
             }
+            .doneaddtodoicon {
+              position: absolute;      
+              right: 9px;      
+              top: 8px;      
+              cursor: pointer;
+              opacity: 0.7;
+            }
             .colorgreen { color: green; }
             .colorred { color: red; }
             .clearcompleted {
@@ -210,6 +223,13 @@
             .categorytrigger {
                 padding: 12px;
             }
+            .btn, .btn-large, .btn-flat {
+              padding: 0 13px;
+            }
+            .btn i, .btn-large i, .btn-floating i, .btn-large i, .btn-flat i {
+              font-size: 12px;
+              margin-right: 4px;
+            }
         </style>
         <link rel="stylesheet" href="css/materialdesignicons.min.css">
     </head>
@@ -231,12 +251,12 @@
                 <li><a class="modal-trigger" href="#modal1">Add Category</a></li>
                 <li><a href="">Account</a></li>
                 <li><a href="">Settings</a></li>
-                <li><a href="">About</a></li>
+                <li><a href="about.html">About</a></li>
               </ul>
               <ul class="side-nav" id="mobile-demo">
                 <li><a href="">Account</a></li>
                 <li><a href="">Settings</a></li>
-                <li><a href="">About</a></li>
+                <li><a href="about.html">About</a></li>
               </ul>
             </div>
         </nav>
@@ -257,11 +277,12 @@
                 <div class="row">
                     <div class="input-field col s12">                      
                       <input value="" class="todo" type="text" placeholder="What To Do .. ?" cat="personal">
+                      <i class="material-icons doneaddtodoicon">done</i>
                     </div>
                     <div class="col s12 todocontent">
                         <hr>
                         <button class="btn waves-effect waves-light clearcompleted right" type="button" name="action" cat="category">
-                            <i class="mdi mdi-checkbox-multiple-marked-outline"></i>
+                            <i class="mdi mdi-checkbox-multiple-marked-outline"></i> Clear
                         </button>
                     </div>
               </div>
@@ -363,25 +384,31 @@
               });
               $(document).on('keypress','.todo',function(e) {
                 if (e.which === EnterKey && $(this).val()) {
-                    var thisValue = $(this).val();
-                    var thisCategory = $(this).attr('cat');
-                    var existingDataCount = $(this).closest(".row").find('p').length;
-                    existingDataCount = (existingDataCount>=1)?(existingDataCount+1):1;
-                    var appendData = '<p><input type="checkbox" name="'+thisCategory+existingDataCount+'" id="'+thisCategory+existingDataCount+'" class="todocheckbox" cat="'+thisCategory+'" count="'+existingDataCount+'"/><label for="'+thisCategory+existingDataCount+'" class="checkboxlabel" cat="'+thisCategory+'" count="'+existingDataCount+'">'+thisValue+'</label><i class="material-icons edittodoicon">edit</i><i class="material-icons alarmicon">alarm</i><input type="text" id="text_'+thisCategory+existingDataCount+'" class="edittodo content-hide" value="'+thisValue+'"><i class="material-icons doneedittodoicon content-hide">done</i></p>';
-                    $(this).closest(".row").find(".todocontent").prepend(appendData);
-                    $(this).val('');
-                    if(localStorage.tododata) {
-                      var maindata = JSON.parse(localStorage.tododata);  
-                      console.log(maindata);
-                      var thisIndex = (maindata.categories).indexOf(thisCategory);
-                      var thisArray = (maindata.todos[thisIndex]);
-                      thisArray.push({task:thisValue,alarm:"",status:0});
-                      maindata.todos[thisIndex] = thisArray;
-                      console.log(maindata);
-                      localStorage.tododata = JSON.stringify(maindata);
-                    }
+                    addTask($(this));                    
                 }
               }); 
+              $(document).on('click','.doneaddtodoicon',function(e) {
+                if($(this).siblings('input').val()) {
+                  addTask($(this).siblings('input'));
+                }
+              });
+              function addTask(thisElem) {
+                var thisValue = thisElem.val();
+                var thisCategory = thisElem.attr('cat');
+                var existingDataCount = thisElem.closest(".row").find('p').length;
+                existingDataCount = (existingDataCount>=1)?(existingDataCount+1):1;
+                var appendData = '<p><input type="checkbox" name="'+thisCategory+existingDataCount+'" id="'+thisCategory+existingDataCount+'" class="todocheckbox" cat="'+thisCategory+'" count="'+existingDataCount+'"/><label for="'+thisCategory+existingDataCount+'" class="checkboxlabel" cat="'+thisCategory+'" count="'+existingDataCount+'">'+thisValue+'</label><i class="material-icons edittodoicon">edit</i><i class="material-icons alarmicon">alarm</i><input type="text" id="text_'+thisCategory+existingDataCount+'" class="edittodo content-hide" value="'+thisValue+'"><i class="material-icons doneedittodoicon content-hide">done</i></p>';
+                thisElem.closest(".row").find(".todocontent").prepend(appendData);
+                thisElem.val('');
+                if(localStorage.tododata) {
+                  var maindata = JSON.parse(localStorage.tododata);  
+                  var thisIndex = (maindata.categories).indexOf(thisCategory);
+                  var thisArray = (maindata.todos[thisIndex]);
+                  thisArray.push({task:thisValue,alarm:"",status:0});
+                  maindata.todos[thisIndex] = thisArray;
+                  localStorage.tododata = JSON.stringify(maindata);
+                }
+              }
               $(document).on('click','.checkboxlabel',function(e) {
                 var thisCategory = $(this).attr('cat');
                 var thisCount = $(this).attr('count');
@@ -467,7 +494,7 @@
               function addCategory() {
                 var new_category = $(".add").val();
                 if(new_category) {
-                    var tempCategory = '<li cat="'+new_category+'"><div class="collapsible-header"><b><i class="large material-icons">list</i>'+new_category.toUpperCase()+'</b><span class="materialicon right"><i class="mdi mdi-chevron-down"></i></span></div><div class="collapsible-body"><div class="row"><div class="input-field col s12"><input value="" class="todo" type="text" placeholder="What To Do .. ?" cat="'+new_category+'"></div><div class="col s12 todocontent"><hr><button class="btn waves-effect waves-light removecategory right" type="button" name="action" cat="category"><i class="mdi mdi-playlist-remove"></i></button><button class="btn waves-effect waves-light clearcompleted right" type="button" name="action" cat="category"><i class="mdi mdi-checkbox-multiple-marked-outline"></i></button></div></div></div></li>';
+                    var tempCategory = '<li cat="'+new_category+'"><div class="collapsible-header"><b><i class="large material-icons">list</i>'+new_category.toUpperCase()+'</b><span class="materialicon right"><i class="mdi mdi-chevron-down"></i></span></div><div class="collapsible-body"><div class="row"><div class="input-field col s12"><input value="" class="todo" type="text" placeholder="What To Do .. ?" cat="'+new_category+'"><i class="material-icons doneaddtodoicon">done</i></div><div class="col s12 todocontent"><hr><button class="btn waves-effect waves-light removecategory right" type="button" name="action" cat="category"><i class="mdi mdi-playlist-remove"></i> Remove</button><button class="btn waves-effect waves-light clearcompleted right" type="button" name="action" cat="category"><i class="mdi mdi-checkbox-multiple-marked-outline"></i> Clear</button></div></div></div></li>';
                     if(localStorage.tododata) {
                         var maindata = JSON.parse(localStorage.tododata);  
                         if((maindata.categories).indexOf(new_category) < 0) {
@@ -497,7 +524,7 @@
                   if(maindata.categories) {
                     $(maindata.categories).each(function(catindex,catname) {
                       if(catname && catname != "personal") {
-                        var appendCategory = '<li cat="'+catname+'"><div class="collapsible-header"><b><i class="large material-icons">list</i>'+catname.toUpperCase()+'</b><span class="materialicon right"><i class="mdi mdi-chevron-down"></i></span></div><div class="collapsible-body"><div class="row"><div class="input-field col s12"><input value="" class="todo" type="text" placeholder="What To Do .. ?" cat="'+catname+'"></div><div class="col s12 todocontent"><hr><button class="btn waves-effect waves-light removecategory right" type="button" name="action" cat="category"><i class="mdi mdi-playlist-remove"></i></button><button class="btn waves-effect waves-light clearcompleted right" type="button" name="action" cat="category"><i class="mdi mdi-checkbox-multiple-marked-outline"></i></button></div></div></div></li>';
+                        var appendCategory = '<li cat="'+catname+'"><div class="collapsible-header"><b><i class="large material-icons">list</i>'+catname.toUpperCase()+'</b><span class="materialicon right"><i class="mdi mdi-chevron-down"></i></span></div><div class="collapsible-body"><div class="row"><div class="input-field col s12"><input value="" class="todo" type="text" placeholder="What To Do .. ?" cat="'+catname+'"><i class="material-icons doneaddtodoicon">done</i></div><div class="col s12 todocontent"><hr><button class="btn waves-effect waves-light removecategory right" type="button" name="action" cat="category"><i class="mdi mdi-playlist-remove"></i> Remove</button><button class="btn waves-effect waves-light clearcompleted right" type="button" name="action" cat="category"><i class="mdi mdi-checkbox-multiple-marked-outline"></i> Clear</button></div></div></div></li>';
                         $(".todo_categories").append(appendCategory);
                         $('.collapsible').collapsible({                      
                           accordion : true
